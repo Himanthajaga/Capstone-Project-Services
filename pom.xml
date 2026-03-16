@@ -9,9 +9,9 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>Enrollment-Service</module>
-        <module>program-Service</module>
-        <module>Student-Service</module>
+        <module>student-service</module>
+        <module>program-service</module>
+        <module>enrollment-Service</module>
 
 
     </modules>
