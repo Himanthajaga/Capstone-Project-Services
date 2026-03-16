@@ -2,7 +2,7 @@
 	path = Student-Service
 	url = https://github.com/Himanthajaga/Capstone-Project-Service-Student.git
 [submodule "program-Service"]
-	path = program-service
+	path = program-Service
 	url = https://github.com/Himanthajaga/Capstone-Project-Service-Program.git
 [submodule "Enrollment-Service"]
 	path = Enrollment-Service
