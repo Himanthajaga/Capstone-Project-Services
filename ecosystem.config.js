@@ -21,10 +21,7 @@ module.exports = {
       name   : "Student-Service",
       script : "java -jar ./Student-Service/target/Student-Service-1.0.0.jar",
       log_file: "./logs/student-service-out.log",
-      instances: 2,
-      env: {
-        GOOGLE_APPLICATION_CREDENTIALS: "/opt/keys/student-service-key.json"
-      }
+      instances: 2
     }
   ],
 }
