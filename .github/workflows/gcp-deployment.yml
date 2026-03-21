@@ -64,9 +64,8 @@ jobs:
 
         - name: Update the instance group with the new boot disk image
           run: |
-            gcloud compute instance-groups managed rolling-action start-update ${{ env.INSTANCE_GROUP }} \
+            gcloud compute instance-groups managed rolling-action replace ${{ env.INSTANCE_GROUP }} \
             --region=${{ env.REGION }} \
-            --type=proactive \
             --max-unavailable=0 \
             --minimal-action=replace \
             --replacement-method=substitute \
