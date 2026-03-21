@@ -11,7 +11,7 @@ jobs:
         INSTANCE_GROUP: mig-services
         INSTANCE_TEMPLATE: tmp-vm-services-seed-v1
         REGION: asia-southeast1
-        ZONE: asia-southeast1-c
+        ZONE: asia-southeast1-a
         USER_NAME: himanthajamburuthugoda
         IMAGE_NAME: vm-services-seed-boot-image
 
@@ -67,10 +67,10 @@ jobs:
             gcloud compute instance-groups managed rolling-action start-update ${{ env.INSTANCE_GROUP }} \
             --region=${{ env.REGION }} \
             --type=proactive \
-            --max-unavailable=3 \
+            --max-unavailable=0 \
             --minimal-action=replace \
-            --replacement-method=recreate \
-            --max-surge=0 \
+            --replacement-method=substitute \
+            --max-surge=3 \
             --version=template=projects/${{ secrets.GCP_PROJECT_ID }}/regions/${{ env.REGION }}/instanceTemplates/${{ env.INSTANCE_TEMPLATE }},name=0-1774072020685
             
             
