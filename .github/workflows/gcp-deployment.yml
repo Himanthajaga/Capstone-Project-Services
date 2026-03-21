@@ -67,7 +67,6 @@ jobs:
             gcloud compute instance-groups managed rolling-action replace ${{ env.INSTANCE_GROUP }} \
             --region=${{ env.REGION }} \
             --max-unavailable=0 \
-            --minimal-action=replace \
             --replacement-method=substitute \
             --max-surge=3 \
             
