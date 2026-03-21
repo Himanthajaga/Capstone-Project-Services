@@ -1,0 +1,77 @@
+name: Capstone Project Platform GCP Deployment
+on: push
+
+jobs:
+    deploy:
+      runs-on: ubuntu-latest
+
+
+      env:
+        VM_NAME: vm-services-seed
+        INSTANCE_GROUP: mig-services
+        INSTANCE_TEMPLATE: tmp-vm-services-seed-v1
+        REGION: asia-southeast1
+        ZONE: asia-southeast1-a
+        USER_NAME: himanthajamburuthugoda
+        IMAGE_NAME: vm-services-seed-boot-image
+
+
+      permissions:
+        contents: 'read'
+        id-token: 'write'
+
+
+      steps:
+        - name: Authenticate to Google Cloud
+          uses: google-github-actions/auth@v3
+          with:
+            workload_identity_provider: ${{ secrets.GCP_WIF_PROVIDER }}
+            service_account: ${{ secrets.GCP_SA_EMAIL }}
+            project_id: ${{ secrets.GCP_PROJECT_ID }}
+
+        - name: Set up gcloud Cloud SDK environment
+          uses: google-github-actions/setup-gcloud@v3.0.1
+
+
+        - name: Start the vm-services-seed
+          run: gcloud compute instances start ${{ env.VM_NAME }} --zone=${{ env.ZONE }}
+
+        - name: Connect with the vm-services-seed through SSH,pull the latest code and build the project
+          run: >
+              gcloud compute ssh ${{env.USER_NAME}}@${{ env.VM_NAME }} --zone=${{ env.ZONE }}
+              --command "echo 'Connected to the vm-services-seed successfully!' &&
+              cd Capstone-Project-Services/ &&
+              git pull --recurse-submodules &&
+              source ~/.bashrc &&
+              mvn clean package
+              "
+
+        - name: Stop the vm-services-seed
+          run: gcloud compute instances stop ${{ env.VM_NAME }} --zone=${{ env.ZONE }}
+
+
+        - name: Delete the boot disk image
+          run: gcloud compute images delete ${{ env.IMAGE_NAME }}
+          continue-on-error: true
+
+        - name: Create a new boot disk image with the previous name
+          run: |
+                gcloud compute images create ${{ env.IMAGE_NAME }} \
+                --source-disk=${{ env.VM_NAME }} \
+                --source-disk-zone=${{ env.ZONE }} \
+                --storage-location=${{ env.REGION }} \
+            
+
+        - name: Update the instance group with the new boot disk image
+          run: |
+            gcloud compute instance-groups managed rolling-action start-update ${{ env.INSTANCE_GROUP }} \
+            --region=${{ env.REGION }} \
+            --type=proactive \
+            --max-unavailable=0 \
+            --minimal-action=replace \
+            --replacement-method=substitute \
+            --max-surge=3 \
+            --version=template=projects/${{ secrets.GCP_PROJECT_ID }}/regions/${{ env.REGION }}/instanceTemplates/${{ env.INSTANCE_TEMPLATE }},name=0-1774072020685
+            
+            
+            
