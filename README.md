@@ -4,12 +4,13 @@ The Services layer contains all the business logic microservices for the Enterpr
 
 ## Student Information
 
-| Field | Value |
-|---|---|
-| Student Name | J.G Himantha |
+| Field          | Value |
+|----------------|---|
+| Student Name   | J.G Himantha |
 | Student Number | 2301692032 |
-| Module | ITS 2130 Enterprise Cloud Application |
-| Program | GDSE @ IJSE |
+| Slack Handle   | Himantha j|
+| Module         | ITS 2130 Enterprise Cloud Application |
+| Program        | GDSE @ IJSE |
 | GCP Project ID | capstone-project-490416 |
 
 ## About
